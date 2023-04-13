@@ -10,8 +10,10 @@ class PersistenciaCsv:
         caminho_projeto = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
         self.arquivo = os.path.join(caminho_projeto, "db", nome_arquivo)
         self.produtos = []
+        self.carregar_dados() # Para verificar se o arquivo existe ou não.
         
     def incluir_produto(self, produto):
+
         with open(self.arquivo, mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([uuid.uuid4(), produto.nome, produto.quantidade, produto.preco])
@@ -50,6 +52,8 @@ class PersistenciaCsv:
                     self.produtos.append(row)
         except FileNotFoundError:
             self.produtos = []
+
+            # Cria o arquivo e acrescente o nome das colunas na primeira linha
             with open(self.arquivo, mode='a', newline='') as file:
                 writer = csv.writer(file)
                 writer.writerow(['id', 'nome', 'quantidade', 'preco'])
