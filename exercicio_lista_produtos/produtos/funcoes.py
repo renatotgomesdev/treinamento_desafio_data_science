@@ -4,11 +4,54 @@ import time
 import models.produto as models
 import telas.funcoes as fnt
 
+flag = True
+while flag:        
+        fnt.menu_db()
+        opcaodb = input("\nInforme o número correspondente e pressione ENTER: ")
+        
+        if opcaodb == "1":
+            fnt.mensagem_com_pausa("Você selecionou o Postgre. Aguarde...")
+            import repositorios.persistencia_postgre as repo
+            repoInstancia = repo.PersistenciaPostgre("localhost", "desafio_data_science", "postgres", "admin")
+            flag = False
+        elif opcaodb == "2":
+            fnt.mensagem_com_pausa("Você selecionou o SQL Server. Aguarde...")
+            import repositorios.persistencia_sqlserver as repo
+            repoInstancia = repo.PersistenciaSQLServer("NOTE-RENATOGOME\\MSSQLSERVER2", "desafio_data_science")
+            flag = False
+        elif opcaodb == "3":
+            fnt.mensagem_com_pausa("Você selecionou o MySQL. Aguarde...")
+            import repositorios.persistencia_mysql as repo
+            repoInstancia = repo.PersistenciaMySQL("localhost", "desafio_data_science", "root", "")
+            flag = False
+        elif opcaodb == "4":
+            fnt.mensagem_com_pausa("Você selecionou o SQLite. Aguarde...")
+            import repositorios.persistencia_sqlite as repo
+            repoInstancia = repo.PersistenciaSQLite("produtos.sqlite")
+            flag = False
+        elif opcaodb == "5":
+            fnt.mensagem_com_pausa("Você selecionou o CSV. Aguarde...")
+            import repositorios.persistencia_csv as repo
+            repoInstancia = repo.PersistenciaCsv("produtos.csv")
+            flag = False
+        elif opcaodb == "6":
+            fnt.mensagem_com_pausa("Você selecionou o JSON. Aguarde...")
+            import repositorios.persistencia_json as repo
+            repoInstancia = repo.PersistenciaJson("produtos.json")
+            flag = False
+        elif opcaodb == "7":
+            fnt.mensagem_com_pausa("Você selecionou o XML. Aguarde...")
+            import repositorios.persistencia_xml as repo
+            repoInstancia = repo.PersistenciaXML("produtos.xml")
+            flag = False
+        else:
+            fnt.mensagem_com_pausa("Opção inválida. Tente novamente.")
+
 # import repositorios.persistencia_postgre as repo
 # repoInstancia = repo.PersistenciaPostgre("localhost", "desafio_data_science", "postgres", "admin")
 
-import repositorios.persistencia_sqlserver as repo
-repoInstancia = repo.PersistenciaSQLServer("NOTE-RENATOGOME\\MSSQLSERVER2", "desafio_data_science")
+# import repositorios.persistencia_sqlserver as repo
+# repoInstancia = repo.PersistenciaSQLServer("NOTE-RENATOGOME\\MSSQLSERVER2", "desafio_data_science")
 
 # import repositorios.persistencia_mysql as repo
 # repoInstancia = repo.PersistenciaMySQL("localhost", "desafio_data_science", "root", "")

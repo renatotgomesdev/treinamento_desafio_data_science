@@ -5,7 +5,7 @@ import telas.funcoes as fnt
 
 while True:
     fnt.menu()
-    opcao = input()
+    opcao = input("\nInforme o número correspondente e pressione ENTER: ")
 
     if opcao == "1":
         fnp.cadastra_produto()

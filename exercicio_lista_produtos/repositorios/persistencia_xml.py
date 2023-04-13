@@ -9,9 +9,22 @@ class PersistenciaXML:
     def __init__(self, nome_arquivo):
         caminho_projeto = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
         self.arquivo = os.path.join(caminho_projeto, "db", nome_arquivo)
-        self.root = ET.Element("produtos")
-        self.tree = ET.ElementTree(self.root)
-        
+        self.tree = ET.ElementTree()
+        self.carregar_arquivo()
+
+    def carregar_arquivo(self):
+        if os.path.exists(self.arquivo):
+            try:
+                self.tree.parse(self.arquivo)
+            except ET.ParseError:
+                pass
+
+        if self.tree.getroot() is None:
+            self.root = ET.Element("produtos")
+            self.tree._setroot(self.root)
+        else:
+            self.root = self.tree.getroot()
+
     def incluir_produto(self, produto):
         produto_element = ET.SubElement(self.root, "produto")
         produto_element.set("id", str(uuid.uuid4()))
@@ -22,7 +35,7 @@ class PersistenciaXML:
         preco_element = ET.SubElement(produto_element, "preco")
         preco_element.text = str(produto.preco)
         self.tree.write(self.arquivo)
-        
+
     def alterar_produto(self, produto):
         for produto_element in self.root.iter("produto"):
             if produto_element.get("id") == produto.id:
@@ -33,15 +46,15 @@ class PersistenciaXML:
                 preco_element = produto_element.find("preco")
                 preco_element.text = str(produto.preco)
                 self.tree.write(self.arquivo)
-        
+
     def excluir_produto(self, id):
         for produto_element in self.root.findall("produto"):
             if produto_element.get("id") == id:
                 self.root.remove(produto_element)
                 self.tree.write(self.arquivo)
-        
+
     def listar_produtos(self):
-        self.carregar_dados()
+        self.carregar_arquivo()
         lista_instancia_produtos = []
         for produto_element in self.root.findall("produto"):
             id = produto_element.get("id")
@@ -54,9 +67,3 @@ class PersistenciaXML:
             produto = model.Produto(id=id, nome=nome, quantidade=quantidade, preco=preco)
             lista_instancia_produtos.append(produto)
         return lista_instancia_produtos
-        
-    def carregar_dados(self):
-        try:
-            self.tree.parse(self.arquivo)
-        except (ET.ParseError, FileNotFoundError):
-            self.tree.write(self.arquivo)

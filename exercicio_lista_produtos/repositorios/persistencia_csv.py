@@ -50,4 +50,7 @@ class PersistenciaCsv:
                     self.produtos.append(row)
         except FileNotFoundError:
             self.produtos = []
+            with open(self.arquivo, mode='a', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['id', 'nome', 'quantidade', 'preco'])
         
